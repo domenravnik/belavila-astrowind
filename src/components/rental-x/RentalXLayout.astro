@@ -1,0 +1,186 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import { rentalXNav, type RentalXSlug } from '~/data/rental-x-pages';
+
+interface Props {
+  title: string;
+  description?: string;
+  slug: RentalXSlug;
+}
+
+const { title, description = '', slug } = Astro.props;
+
+const metadata = {
+  title: `Rental X - ${title}`,
+  description,
+};
+
+const footerPages = [
+  ['About us', 'about'],
+  ['Rooms', 'rooms'],
+  ['Rooms category', 'rooms-category'],
+  ['Blog', 'blog'],
+  ['Contact', 'contact-v1'],
+] as const;
+
+const utilityPages = [
+  ['Blog category', 'blog-category'],
+  ['Blog post', 'blog-post'],
+  ['Password protected', 'password-protected'],
+  ['404 page', 'not-found'],
+] as const;
+---
+
+<Layout metadata={metadata}>
+  <div class="rx min-h-screen bg-[#f6f6f6] text-[#111]">
+    <header class="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+        <a href="/rental-x" class="text-sm font-semibold tracking-[0.08em] uppercase">
+          <span class="inline-flex items-center gap-2"><span class="text-[#ff4d4d]">▲</span> Rental X</span>
+        </a>
+
+        <button
+          type="button"
+          class="inline-flex items-center rounded-full border border-black/15 px-3 py-1 text-sm md:hidden"
+          data-rx-menu-toggle
+          aria-label="Toggle menu"
+        >
+          Menu
+        </button>
+
+        <nav class="hidden items-center gap-1 md:flex" data-rx-menu>
+          {
+            rentalXNav.map((item) => (
+              <a
+                href={`/rental-x/${item.slug}`}
+                class:list={[
+                  'rounded-full px-3 py-1.5 text-sm transition',
+                  slug === item.slug ? 'bg-[#ff4d4d] text-white' : 'text-black/70 hover:bg-black/[0.05] hover:text-black',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <a
+          href="/rental-x/contact-v1"
+          class="hidden rounded-full bg-[#ff4d4d] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#e84242] md:inline-flex"
+        >
+          Book now
+        </a>
+      </div>
+
+      <nav class="mx-auto hidden w-full max-w-6xl px-4 pb-3 md:hidden" data-rx-menu>
+        <div class="grid gap-2 rounded-2xl border border-black/10 bg-white p-3">
+          {
+            rentalXNav.map((item) => (
+              <a
+                href={`/rental-x/${item.slug}`}
+                class:list={[
+                  'rounded-xl px-3 py-2 text-sm',
+                  slug === item.slug ? 'bg-[#ff4d4d] text-white' : 'text-black/80 hover:bg-black/[0.05]',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <a href="/rental-x/contact-v1" class="rounded-xl bg-black px-3 py-2 text-center text-sm font-semibold text-white">Book now</a>
+        </div>
+      </nav>
+    </header>
+
+    <slot />
+
+    <footer class="mt-16 border-t border-black/10 bg-white">
+      <div class="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1.3fr_1fr_1fr_1.2fr] md:px-6">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.08em]"><span class="text-[#ff4d4d]">▲</span> Rental X</p>
+          <p class="mt-4 max-w-sm text-sm text-black/70">
+            Boutique forest cabins, curated local experiences, and peaceful stays designed for real recharge.
+          </p>
+          <div class="mt-4 flex gap-3 text-sm text-black/60">
+            <span>f</span><span>x</span><span>ig</span><span>yt</span>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-[0.08em]">Pages</h2>
+          <ul class="mt-4 space-y-2 text-sm text-black/70">
+            {
+              footerPages.map(([label, pageSlug]) => (
+                <li><a class="hover:text-black" href={`/rental-x/${pageSlug}`}>{label}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-[0.08em]">Utility pages</h2>
+          <ul class="mt-4 space-y-2 text-sm text-black/70">
+            {
+              utilityPages.map(([label, pageSlug]) => (
+                <li><a class="hover:text-black" href={`/rental-x/${pageSlug}`}>{label}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-[0.08em]">Subscribe to our newsletter</h2>
+          <p class="mt-3 text-sm text-black/70">Monthly travel inspiration and private stay offers.</p>
+          <form class="mt-4 flex gap-2" data-rx-demo-form>
+            <input
+              type="email"
+              required
+              placeholder="Enter your email"
+              class="w-full rounded-full border border-black/15 px-4 py-2 text-sm outline-none focus:border-[#ff4d4d]"
+            />
+            <button type="submit" class="rounded-full bg-[#ff4d4d] px-4 py-2 text-sm font-semibold text-white">Submit</button>
+          </form>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script is:inline>
+    const setupRentalX = () => {
+      document.querySelectorAll('[data-rx-menu-toggle]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const menus = document.querySelectorAll('[data-rx-menu]');
+          menus.forEach((menu, index) => {
+            if (index > 0) {
+              menu.classList.toggle('hidden');
+            }
+          });
+        });
+      });
+
+      document.querySelectorAll('[data-rx-carousel]').forEach((carousel) => {
+        const track = carousel.querySelector('[data-rx-track]');
+        const prev = carousel.querySelector('[data-rx-prev]');
+        const next = carousel.querySelector('[data-rx-next]');
+        if (!track || !prev || !next) return;
+
+        const step = () => Math.max(track.clientWidth * 0.82, 280);
+
+        prev.addEventListener('click', () => {
+          track.scrollBy({ left: -step(), behavior: 'smooth' });
+        });
+
+        next.addEventListener('click', () => {
+          track.scrollBy({ left: step(), behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('[data-rx-demo-form]').forEach((form) => {
+        form.addEventListener('submit', (event) => event.preventDefault());
+      });
+    };
+
+    setupRentalX();
+    document.addEventListener('astro:page-load', setupRentalX);
+  </script>
+</Layout>

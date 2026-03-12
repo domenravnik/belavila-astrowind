@@ -1,0 +1,53 @@
+---
+import { blogPosts } from '~/data/rental-x-pages';
+---
+
+<main>
+  <section class="relative overflow-hidden">
+    <img
+      src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=2200&q=80"
+      alt="Blog"
+      class="h-[42vh] min-h-[320px] w-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/55"></div>
+    <div class="absolute inset-0 flex items-center justify-center px-4 text-white">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-[0.18em] text-white/70">Blog & Resources</p>
+        <h1 class="mt-3 text-4xl font-semibold md:text-6xl">Stories from the forest</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto w-full max-w-6xl px-4 pt-12 md:px-6">
+    <article class="overflow-hidden rounded-3xl border border-black/10 bg-white md:grid md:grid-cols-2">
+      <img src={blogPosts[0].image} alt={blogPosts[0].title} class="h-72 w-full object-cover md:h-full" />
+      <div class="p-6 md:p-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[#ff4d4d]">Featured</p>
+        <h2 class="mt-3 text-3xl font-semibold">{blogPosts[0].title}</h2>
+        <p class="mt-4 text-sm text-black/70 md:text-base">{blogPosts[0].excerpt}</p>
+        <div class="mt-6 flex items-center gap-3 text-xs text-black/60">
+          <span>{blogPosts[0].category}</span>
+          <span>•</span>
+          <span>{blogPosts[0].date}</span>
+        </div>
+        <a href="/rental-x/blog-post" class="mt-6 inline-flex rounded-full bg-[#ff4d4d] px-5 py-2 text-sm font-semibold text-white">Read article</a>
+      </div>
+    </article>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      {
+        blogPosts.slice(1).map((post) => (
+          <article class="overflow-hidden rounded-2xl border border-black/10 bg-white">
+            <img src={post.image} alt={post.title} class="h-44 w-full object-cover" />
+            <div class="p-4">
+              <p class="text-xs font-semibold uppercase tracking-[0.08em] text-[#ff4d4d]">{post.category}</p>
+              <h3 class="mt-2 text-lg font-semibold">{post.title}</h3>
+              <p class="mt-2 text-sm text-black/70">{post.excerpt}</p>
+              <a href="/rental-x/blog-post" class="mt-4 inline-flex text-sm font-semibold text-black underline">Read more</a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</main>

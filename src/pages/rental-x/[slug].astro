@@ -1,0 +1,51 @@
+---
+import type { RentalXSlug } from '~/data/rental-x-pages';
+import { rentalXPageList, rentalXPages } from '~/data/rental-x-pages';
+import RentalXLayout from '~/components/rental-x/RentalXLayout.astro';
+
+import HomePage from '~/components/rental-x/pages/HomePage.astro';
+import AboutPage from '~/components/rental-x/pages/AboutPage.astro';
+import ContactPage from '~/components/rental-x/pages/ContactPage.astro';
+import RoomsPage from '~/components/rental-x/pages/RoomsPage.astro';
+import RoomsCategoryPage from '~/components/rental-x/pages/RoomsCategoryPage.astro';
+import RoomSinglePage from '~/components/rental-x/pages/RoomSinglePage.astro';
+import BlogPage from '~/components/rental-x/pages/BlogPage.astro';
+import BlogPostPage from '~/components/rental-x/pages/BlogPostPage.astro';
+import BlogCategoryPage from '~/components/rental-x/pages/BlogCategoryPage.astro';
+import PasswordProtectedPage from '~/components/rental-x/pages/PasswordProtectedPage.astro';
+import NotFoundPage from '~/components/rental-x/pages/NotFoundPage.astro';
+
+export const getStaticPaths = async () =>
+  rentalXPageList.map((page) => ({
+    params: { slug: page.slug },
+    props: { slug: page.slug },
+  }));
+
+const { slug } = Astro.props as { slug: RentalXSlug };
+
+const page = rentalXPages[slug];
+
+if (!page) {
+  throw new Error(`Unknown rental-x page: ${slug}`);
+}
+
+const components = {
+  home: HomePage,
+  about: AboutPage,
+  'contact-v1': ContactPage,
+  rooms: RoomsPage,
+  'rooms-category': RoomsCategoryPage,
+  'room-single': RoomSinglePage,
+  blog: BlogPage,
+  'blog-post': BlogPostPage,
+  'blog-category': BlogCategoryPage,
+  'password-protected': PasswordProtectedPage,
+  'not-found': NotFoundPage,
+} as const;
+
+const PageComponent = components[slug];
+---
+
+<RentalXLayout title={page.title} description={page.description} slug={slug}>
+  <PageComponent />
+</RentalXLayout>
