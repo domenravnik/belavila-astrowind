@@ -24,76 +24,126 @@ const {
       {bg ? <Fragment set:html={bg} /> : null}
     </slot>
   </div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
-    <div class="py-12 md:py-20">
-      <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
-        {
-          tagline && (
-            <p
-              class="text-base text-secondary dark:text-blue-200 font-bold tracking-wide uppercase intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-              set:html={tagline}
+  {image ? (
+    <div class="relative">
+      <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
+      <div class="relative overflow-hidden">
+        <div
+          class="intersect-once intersect-no-queue intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+        >
+          {typeof image === 'string' ? (
+            <Fragment set:html={image} />
+          ) : (
+            <Image
+              class="h-[74vh] min-h-[560px] w-full object-cover"
+              widths={[640, 1024, 1536, 2040]}
+              sizes="100vw"
+              loading="eager"
+              width={2040}
+              height={1200}
+              {...image}
             />
-          )
-        }
-        {
-          title && (
-            <h1
-              class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-              set:html={title}
-            />
-          )
-        }
-        <div class="max-w-3xl mx-auto">
+          )}
+        </div>
+        <div class="absolute inset-0 bg-black/55" aria-hidden="true"></div>
+
+        <div class="absolute inset-0 flex items-center justify-center px-4">
+          <div class="mx-auto max-w-3xl text-center text-white">
+            {
+              tagline && (
+                <p
+                  class="text-xs font-bold uppercase tracking-[0.18em] text-white/75 md:text-sm intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                  set:html={tagline}
+                />
+              )
+            }
+            {
+              title && (
+                <h1
+                  class="mt-4 text-4xl font-semibold leading-tight md:text-6xl intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                  set:html={title}
+                />
+              )
+            }
+            <div class="mx-auto mt-4 max-w-2xl">
+              {
+                subtitle && (
+                  <p
+                    class="text-sm text-white/85 md:text-base intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                    set:html={subtitle}
+                  />
+                )
+              }
+              {
+                actions && (
+                  <div class="mt-8 flex flex-wrap items-center justify-center gap-3 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+                    {Array.isArray(actions) ? (
+                      actions.map((action) => (
+                        <div class="flex w-full sm:w-auto">
+                          <Button {...(action || {})} class="w-full sm:mb-0" />
+                        </div>
+                      ))
+                    ) : (
+                      <Fragment set:html={actions} />
+                    )}
+                  </div>
+                )
+              }
+            </div>
+            {content && <Fragment set:html={content} />}
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
+      <div class="py-12 md:py-20">
+        <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
           {
-            subtitle && (
+            tagline && (
               <p
-                class="text-xl text-muted mb-6 dark:text-slate-300 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-                set:html={subtitle}
+                class="text-base text-secondary dark:text-blue-200 font-bold tracking-wide uppercase intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                set:html={tagline}
               />
             )
           }
           {
-            actions && (
-              <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
-                {Array.isArray(actions) ? (
-                  actions.map((action) => (
-                    <div class="flex w-full sm:w-auto">
-                      <Button {...(action || {})} class="w-full sm:mb-0" />
-                    </div>
-                  ))
-                ) : (
-                  <Fragment set:html={actions} />
-                )}
-              </div>
+            title && (
+              <h1
+                class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                set:html={title}
+              />
             )
           }
-        </div>
-        {content && <Fragment set:html={content} />}
-      </div>
-      <div
-        class="intersect-once intersect-no-queue intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-      >
-        {
-          image && (
-            <div class="relative m-auto max-w-5xl">
-              {typeof image === 'string' ? (
-                <Fragment set:html={image} />
-              ) : (
-                <Image
-                  class="mx-auto rounded-md w-full"
-                  widths={[400, 768, 1024, 2040]}
-                  sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
-                  loading="eager"
-                  width={1024}
-                  height={576}
-                  {...image}
+          <div class="max-w-3xl mx-auto">
+            {
+              subtitle && (
+                <p
+                  class="text-xl text-muted mb-6 dark:text-slate-300 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+                  set:html={subtitle}
                 />
-              )}
-            </div>
-          )
-        }
+              )
+            }
+            {
+              actions && (
+                <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+                  {Array.isArray(actions) ? (
+                    actions.map((action) => (
+                      <div class="flex w-full sm:w-auto">
+                        <Button {...(action || {})} class="w-full sm:mb-0" />
+                      </div>
+                    ))
+                  ) : (
+                    <Fragment set:html={actions} />
+                  )}
+                </div>
+              )
+            }
+          </div>
+          {content && <Fragment set:html={content} />}
+        </div>
       </div>
     </div>
-  </div>
+  )}
 </section>
